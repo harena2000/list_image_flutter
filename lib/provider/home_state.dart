@@ -24,10 +24,9 @@ class HomeState extends ChangeNotifier {
     data = await request.getListImageItem();
     if (data != null) {
       imageModelList = data;
-
-      filteredList = imageModelList;
       status = true;
     }
+    filteredList.addAll(imageModelList);
     onLoading(false);
   }
 
@@ -38,31 +37,30 @@ class HomeState extends ChangeNotifier {
     data = await request.getListImageItem();
     if (data != null) {
       imageModelList = data;
-      filteredList = imageModelList;
       status = true;
     } else {
       status = false;
     }
+    filteredList.addAll(imageModelList);
     onLoading(false);
   }
 
   void filterItems(String query) {
     List<ImageItemModel> tempList = [];
-
     tempList.addAll(imageModelList);
 
     if (query.isNotEmpty) {
-      filteredList.clear();
-      for (int index = 0; index < tempList.length; index++) {
-        if (tempList[index]
-            .title!
-            .toLowerCase()
-            .contains(query.toLowerCase())) {
-          filteredList.add(tempList[index]);
+      List<ImageItemModel> searchList = [];
+      tempList.forEach((element) {
+        if (element.title!.toLowerCase().contains(query.toLowerCase())) {
+          searchList.add(element);
         }
-      }
+      });
+      filteredList.clear();
+      filteredList.addAll(searchList);
     } else {
-      filteredList.addAll(tempList);
+      filteredList.clear();
+      filteredList.addAll(imageModelList);
     }
 
     notifyListeners();

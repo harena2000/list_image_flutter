@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   Expanded(
-                      child: model.imageModelList.isEmpty
+                      child: model.filteredList.isEmpty
                           ? const Center(
                               child: Text("No data set"),
                             )
@@ -57,13 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (context, index) {
                                 return SizedBox(
                                   height: 80,
-                                  child: CustomListTile(
-                                    leadingImage: RoundedImage(
-                                      imageUrl: model
-                                          .imageModelList[index].thumbnailUrl!,
-                                      widthHeight: 200,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      
+                                    },
+                                    child: CustomListTile(
+                                      leadingImage: RoundedImage(
+                                        imageUrl: model
+                                            .filteredList[index].thumbnailUrl!,
+                                        widthHeight: 200,
+                                      ),
+                                      title: model.filteredList[index].title!,
                                     ),
-                                    title: model.imageModelList[index].title!,
                                   ),
                                 );
                               },

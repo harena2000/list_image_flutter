@@ -3,7 +3,7 @@ class ImageItemModel {
   int? id;
   String? title;
   String? url;
-  String? thumbnailUrl;
+  String? thumbnailUrl = "";
 
   ImageItemModel(
       {this.albumId, this.id, this.title, this.url, this.thumbnailUrl});

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_practical_test/api/base_request.dart';
 import 'package:flutter_practical_test/model/image_item_model.dart';
@@ -9,7 +7,8 @@ class ImageItemRequest {
 
   Future<List<ImageItemModel>> getListImageItem() async {
     try {
-      Response response = await baseApi.dio().then((method) => method.get(""));
+      Response response =
+          await baseApi.dio().then((method) => method.get("/photos"));
       return (response.data as List)
           .map((e) => ImageItemModel.fromJson(e))
           .toList();

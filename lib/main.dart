@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practical_test/provider/home_state.dart';
 import 'package:flutter_practical_test/screen/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => HomeState(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,9 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-        ),
+        debugShowCheckedModeBanner: false,
+        theme:
+            ThemeData(primarySwatch: Colors.green, primaryColor: Colors.white),
         home: const HomeScreen());
   }
 }

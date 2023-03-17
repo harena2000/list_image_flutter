@@ -8,6 +8,8 @@ class HomeState extends ChangeNotifier {
   bool status = false;
 
   List<ImageItemModel> imageModelList = [];
+  List<ImageItemModel> filteredList = [];
+
   ImageItemRequest request = ImageItemRequest();
 
   void onLoading(bool isLoading) {
@@ -22,6 +24,21 @@ class HomeState extends ChangeNotifier {
     data = await request.getListImageItem();
     if (data != null) {
       imageModelList = data;
+
+      filteredList = imageModelList;
+      status = true;
+    }
+    onLoading(false);
+  }
+
+  void refreshList() async {
+    loadingText = "Refreshing data";
+    onLoading(true);
+    List<ImageItemModel> data = [];
+    data = await request.getListImageItem();
+    if (data != null) {
+      imageModelList = data;
+      filteredList = imageModelList;
       status = true;
     } else {
       status = false;
@@ -29,19 +46,26 @@ class HomeState extends ChangeNotifier {
     onLoading(false);
   }
 
-  void refreshList() async {
-    loadingText = "Refreshing data";
-    ;
-    onLoading(true);
-    List<ImageItemModel> data = [];
-    data = await request.getListImageItem();
-    if (data != null) {
-      imageModelList = data;
-      status = true;
+  void filterItems(String query) {
+    List<ImageItemModel> tempList = [];
+
+    tempList.addAll(imageModelList);
+
+    if (query.isNotEmpty) {
+      filteredList.clear();
+      for (int index = 0; index < tempList.length; index++) {
+        if (tempList[index]
+            .title!
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          filteredList.add(tempList[index]);
+        }
+      }
     } else {
-      status = false;
+      filteredList.addAll(tempList);
     }
-    onLoading(false);
+
+    notifyListeners();
   }
 
   HomeState() {

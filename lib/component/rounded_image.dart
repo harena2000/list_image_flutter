@@ -16,9 +16,9 @@ class RoundedImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(Const.borderRadius)),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        progressIndicatorBuilder: (context, url, progress) => Center(
+        placeholder: (context, url) => const Center(
           child: CircularProgressIndicator(
-            value: progress.downloaded.toDouble(),
+            color: Colors.white,
           ),
         ),
         fit: BoxFit.cover,

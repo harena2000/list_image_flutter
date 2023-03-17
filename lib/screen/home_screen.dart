@@ -3,7 +3,10 @@ import 'package:flutter_practical_test/component/custom_text_field.dart';
 import 'package:flutter_practical_test/component/custom_list_tile.dart';
 import 'package:flutter_practical_test/component/loader_with_text.dart';
 import 'package:flutter_practical_test/component/rounded_image.dart';
+import 'package:flutter_practical_test/model/image_item_model.dart';
 import 'package:flutter_practical_test/provider/home_state.dart';
+import 'package:flutter_practical_test/screen/details_screen.dart';
+import 'package:loadmore/loadmore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +18,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ScrollController? _scrollController;
+
+  void navigate(ImageItemModel imageItemModel) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => DetailsScreen(model: imageItemModel)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeState>(builder: (context, model, child) {
@@ -52,26 +64,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? const Center(
                               child: Text("No data set"),
                             )
-                          : ListView.builder(
-                              itemCount: model.filteredList.length,
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  height: 80,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      
-                                    },
-                                    child: CustomListTile(
-                                      leadingImage: RoundedImage(
-                                        imageUrl: model
-                                            .filteredList[index].thumbnailUrl!,
-                                        widthHeight: 200,
+                          : LoadMore(
+                              isFinish: model.filteredList.length >= 20,
+                              onLoadMore: model.loadMore,
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                itemCount: model.filteredList.length,
+                                itemBuilder: (context, index) {
+                                  return SizedBox(
+                                    height: 80,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        navigate(model.filteredList[index]);
+                                      },
+                                      child: CustomListTile(
+                                        leadingImage: RoundedImage(
+                                          imageUrl: model.filteredList[index]
+                                              .thumbnailUrl!,
+                                          widthHeight: 200,
+                                        ),
+                                        title: model.filteredList[index].title!,
                                       ),
-                                      title: model.filteredList[index].title!,
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ))
                 ],
               ),

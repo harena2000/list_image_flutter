@@ -66,6 +66,11 @@ class HomeState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> loadMore() async {
+    await Future.delayed(const Duration(seconds: 0, milliseconds: 100));
+    return true;
+  }
+
   HomeState() {
     fetchListImage();
   }

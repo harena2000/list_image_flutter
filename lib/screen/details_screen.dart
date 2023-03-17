@@ -16,72 +16,141 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Scaffold(
-        backgroundColor: Colors.blueGrey[900],
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              foregroundColor: Colors.white,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    widget.model.url!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                  background: Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(30),
-                              bottomRight: Radius.circular(30))),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.model.url!,
-                        progressIndicatorBuilder: (context, url, progress) =>
-                            Center(
-                          child: CircularProgressIndicator(
-                            value: progress.downloaded.toDouble(),
+      backgroundColor: Colors.blueGrey[900],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            foregroundColor: Colors.white,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30))),
+            flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                    clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30))),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.model.url!,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                      fit: BoxFit.cover,
+                    ))),
+            pinned: true,
+            expandedHeight: MediaQuery.of(context).size.height * 0.305,
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RoundedImage(
+                          imageUrl: widget.model.thumbnailUrl!,
+                          widthHeight: 100,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  widget.model.title!,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "url : ${widget.model.url!}",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w200),
+                                softWrap: true,
+                              ),
+                            ],
                           ),
                         ),
-                        fit: BoxFit.cover,
-                      ))),
-              pinned: true,
-              expandedHeight: MediaQuery.of(context).size.height * 0.305,
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              SizedBox(
-                height: 200,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RoundedImage(
-                      imageUrl: widget.model.thumbnailUrl!,
-                      widthHeight: 200,
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.model.title!,
-                          style: const TextStyle(color: Colors.white, fontSize: 18),
+                          "ALBUM : ${widget.model.albumId!}",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w200),
+                          softWrap: true,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "ID : ${widget.model.id!}",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w200),
+                          softWrap: true,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "IMAGE : ${widget.model.url!}",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w200),
+                          softWrap: true,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "THUMBNAIL : ${widget.model.thumbnailUrl!}",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w200),
                           softWrap: true,
                         ),
                       ],
                     ),
-                  ],
-                ),
-              )
-            ]))
-          ],
-        ),
+                  )
+                ],
+              ),
+            ),
+          ]))
+        ],
       ),
     );
   }

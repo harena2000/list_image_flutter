@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practical_test/component/album_image.dart';
 import 'package:flutter_practical_test/component/custom_text_field.dart';
 import 'package:flutter_practical_test/component/custom_list_tile.dart';
 import 'package:flutter_practical_test/component/loader_with_text.dart';
@@ -18,7 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ScrollController? _scrollController;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void navigate(ImageItemModel imageItemModel) {
     Navigator.push(
@@ -41,56 +45,122 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        child: Scaffold(
-          backgroundColor: Colors.grey.shade800,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomTextField(
-                    hintText: "Search",
-                    icon: Icons.search_rounded,
-                    onChange: (value) {
-                      model.filterItems(value);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                      child: model.filteredList.isEmpty
-                          ? const Center(
-                              child: Text("No data set"),
-                            )
-                          : LoadMore(
-                              isFinish: model.filteredList.length >= 20,
-                              onLoadMore: model.loadMore,
-                              child: ListView.builder(
-                                controller: _scrollController,
-                                itemCount: model.filteredList.length,
-                                itemBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 80,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        navigate(model.filteredList[index]);
-                                      },
-                                      child: CustomListTile(
-                                        leadingImage: RoundedImage(
-                                          imageUrl: model.filteredList[index]
-                                              .thumbnailUrl!,
-                                          widthHeight: 200,
-                                        ),
-                                        title: model.filteredList[index].title!,
-                                      ),
-                                    ),
-                                  );
-                                },
+        child: Container(
+          child: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.green,
+                bottom: TabBar(
+                  tabs: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      child: const Text(
+                        "All",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      child: const Text("Album",
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+                title: const Text('Flutter Pratical Test'),
+              ),
+              backgroundColor: Colors.grey.shade800,
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: model.filteredList.isEmpty
+                      ? const Center(
+                          child: Text("No data set"),
+                        )
+                      : TabBarView(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomTextField(
+                                  hintText: "Search",
+                                  icon: Icons.search_rounded,
+                                  onChange: (value) {
+                                    model.filterItems(value);
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Expanded(
+                                    child: model.filteredList.isEmpty
+                                        ? const Center(
+                                            child: Text("No data set"),
+                                          )
+                                        : RefreshIndicator(
+                                            onRefresh: model.refreshList,
+                                            child: ListView.builder(
+                                              itemCount:
+                                                  model.filteredList.length,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    navigate(model
+                                                        .filteredList[index]);
+                                                  },
+                                                  child: SizedBox(
+                                                    height: 80,
+                                                    child: CustomListTile(
+                                                      leadingImage:
+                                                          RoundedImage(
+                                                        imageUrl: model
+                                                            .filteredList[index]
+                                                            .thumbnailUrl!,
+                                                        widthHeight: 200,
+                                                      ),
+                                                      title: model
+                                                          .filteredList[index]
+                                                          .title!,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ))
+                              ],
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Wrap(
+                                spacing: 15,
+                                runSpacing: 15,
+                                children: List.generate(model.albumList.length,
+                                    (index) {
+                                  String imageUrl1 = "";
+                                  String imageUrl2 = "";
+                                  String imageUrl3 = "";
+
+                                  print(
+                                      "Album : ${model.albumList.values.elementAt(index)[0].albumId!} : ${model.albumList.values.elementAt(index)[0].id!}");
+
+                                  return AlbumImage(
+                                      image1: model.albumList.values
+                                          .elementAt(index)[0]
+                                          .url!,
+                                      image2: model.albumList.values
+                                          .elementAt(index)[1]
+                                          .url!,
+                                      image3: model.albumList.values
+                                          .elementAt(index)[2]
+                                          .url!);
+                                }),
                               ),
-                            ))
-                ],
+                            ),
+                          ],
+                        ),
+                ),
               ),
             ),
           ),

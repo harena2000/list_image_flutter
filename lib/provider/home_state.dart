@@ -9,6 +9,8 @@ class HomeState extends ChangeNotifier {
 
   List<ImageItemModel> imageModelList = [];
   List<ImageItemModel> filteredList = [];
+  Map<int, List<ImageItemModel>> albumList = {};
+  List<int> albumId = [];
 
   ImageItemRequest request = ImageItemRequest();
 
@@ -24,13 +26,35 @@ class HomeState extends ChangeNotifier {
     data = await request.getListImageItem();
     if (data != null) {
       imageModelList = data;
+      getAlbumId();
       status = true;
     }
     filteredList.addAll(imageModelList);
     onLoading(false);
   }
 
-  void refreshList() async {
+  void getAlbumId() {
+    for (var i = 0; i < imageModelList.length; i++) {
+      if (!(albumId.contains(imageModelList[i].albumId))) {
+        albumId.add(imageModelList[i].albumId!);
+      }
+    }
+    createAlbumListById();
+  }
+
+  void createAlbumListById() {
+    for (var i = 0; i < albumId.length; i++) {
+      List<ImageItemModel> list = [];
+      for (var j = 0; j < imageModelList.length; j++) {
+        if (albumId[i] == imageModelList[j].albumId) {
+          list.add(imageModelList[j]);
+        }
+        albumList.putIfAbsent(albumId[i], () => list);
+      }
+    }
+  }
+
+  Future<void> refreshList() async {
     loadingText = "Refreshing data";
     onLoading(true);
     List<ImageItemModel> data = [];
@@ -62,13 +86,7 @@ class HomeState extends ChangeNotifier {
       filteredList.clear();
       filteredList.addAll(imageModelList);
     }
-
     notifyListeners();
-  }
-
-  Future<bool> loadMore() async {
-    await Future.delayed(const Duration(seconds: 0, milliseconds: 100));
-    return true;
   }
 
   HomeState() {

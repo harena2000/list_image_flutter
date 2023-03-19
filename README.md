@@ -3,6 +3,9 @@
 
 This project is about to fetched a list of item from the api and have a search feature.
 
+# API
+
+To check all end point on the api, check https://jsonplaceholder.typicode.com/photos.
 
 # Requirement
 To run this project, your dart SDK need to be updated on the last version. sdk: '>=2.19.1 <3.0.0'

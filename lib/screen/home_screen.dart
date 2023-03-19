@@ -6,9 +6,8 @@ import 'package:flutter_practical_test/component/loader_with_text.dart';
 import 'package:flutter_practical_test/component/rounded_image.dart';
 import 'package:flutter_practical_test/model/image_item_model.dart';
 import 'package:flutter_practical_test/provider/home_state.dart';
-import 'package:flutter_practical_test/screen/album_list_screen.dart';
+import 'package:flutter_practical_test/screen/album_details_screen.dart';
 import 'package:flutter_practical_test/screen/details_screen.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => AlbumListScreen(
+            builder: (_) => AlbumDetailsScreen(
                   imageListModel: imageListModel,
                   albumId: albumId,
                 )));

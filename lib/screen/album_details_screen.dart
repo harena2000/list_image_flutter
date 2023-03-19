@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practical_test/component/custom_list_tile.dart';
-import 'package:flutter_practical_test/component/custom_text_field.dart';
 import 'package:flutter_practical_test/component/rounded_image.dart';
 import 'package:flutter_practical_test/model/image_item_model.dart';
-import 'package:flutter_practical_test/provider/home_state.dart';
 import 'package:flutter_practical_test/screen/details_screen.dart';
-import 'package:provider/provider.dart';
 
-class AlbumListScreen extends StatefulWidget {
+class AlbumDetailsScreen extends StatefulWidget {
   final List<ImageItemModel> imageListModel;
   final int albumId;
 
-  const AlbumListScreen(
+  const AlbumDetailsScreen(
       {super.key, required this.imageListModel, required this.albumId});
 
   @override
-  State<AlbumListScreen> createState() => _AlbumListScreenState();
+  State<AlbumDetailsScreen> createState() => _AlbumDetailsScreenState();
 }
 
-class _AlbumListScreenState extends State<AlbumListScreen> {
+class _AlbumDetailsScreenState extends State<AlbumDetailsScreen> {
   void navigate(ImageItemModel imageItemModel) {
     Navigator.push(
         context,
